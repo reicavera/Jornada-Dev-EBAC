@@ -1,5 +1,7 @@
 import React,{useRef,useState} from 'react'
+import VideoFooter from './components/footer/VideoFooter'
 import './video.css'
+
 function Video() {
   const videoRef = useRef(null)
   const [play,setPlay] =useState(false)
@@ -20,9 +22,11 @@ function Video() {
           className='video__player'
           ref={videoRef}
           onClick = {handleStart}
-          src='https://firebasestorage.googleapis.com/v0/b/jornada2-eb156.appspot.com/o/brecker2.mp4?alt=media&token=b7e3ebf7-89a0-47a0-8a34-66f1176a71e3'
+          loop
+          src='https://poqlymuephttfsljdabn.supabase.co/storage/v1/object/public/jornadadev/brecker2.mp4'
         >
         </video>
+        <VideoFooter/>
     </div>
   )
 }
