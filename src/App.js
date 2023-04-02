@@ -1,49 +1,41 @@
-import './App.css';
-import Video from './pages/Video';
-
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import Video from "./pages/Video";
+import db from "./config/firebase";
+import { collection, getDocs } from "firebase/firestore/lite";
 function App() {
+  const [video, setVideos] = useState([]);
+  async function getVideos() {
+    const videosCollection = collection(db, "videos");
+    const videosSnapshot = await getDocs(videosCollection);
+    const videosList = videosSnapshot.docs.map((doc) => doc.data());
+    setVideos(videosList);
+  }
+
+  useEffect(() => {
+    getVideos();
+  }, []);
+
   return (
     <div className="App">
-      <div className='app__videos'>
-        <Video
-          likes={100}
-          messages={200}
-          shares ={300}
-          name='Paulo'
-          description='Brecker o goleiro'
-          music='Musica épica'
-          url='https://poqlymuephttfsljdabn.supabase.co/storage/v1/object/public/jornadadev/brecker2.mp4'
-        />
-        <Video
-          likes={0}
-          messages={0}
-          shares ={0}
-          name='João'
-          description='Gato olhando dono'
-          music='Musica com Voz'
-          url='https://firebasestorage.googleapis.com/v0/b/jornada-b5e9d.appspot.com/o/bird.mp4?alt=media&token=38b50871-393f-4fa4-9951-c6fc08af7e9e'
-        />
-        <Video
-          likes={111}
-          messages={222}
-          shares ={333}
-          name='Pedro'
-          description='Gato pulando'
-          music='Musica Qualquer'
-          url='https://poqlymuephttfsljdabn.supabase.co/storage/v1/object/public/jornadadev/brecker2.mp4'
-        />
-        <Video
-          likes={200}
-          messages={50}
-          shares ={10}
-          name='Lucas'
-          description='Gato'
-          music='Musica'
-          url='https://firebasestorage.googleapis.com/v0/b/jornada-b5e9d.appspot.com/o/bird.mp4?alt=media&token=38b50871-393f-4fa4-9951-c6fc08af7e9e '
-        />
+      <div className="app__videos">
+        {video.map((item) => {
+          return (
+            <Video
+              likes={item.likes}
+              messages={item.messages}
+              shares={item.shares}
+              name={item.name}
+              description={item.description}
+              music={item.music}
+              url={item.url}
+            />
+          );
+        })}
       </div>
     </div>
   );
 }
 
 export default App;
+
